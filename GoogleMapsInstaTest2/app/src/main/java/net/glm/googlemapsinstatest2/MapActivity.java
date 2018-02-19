@@ -40,6 +40,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import static net.glm.googlemapsinstatest2.Utility.Utility.getCircle;
+import static net.glm.googlemapsinstatest2.Utility.Utility.getCircledBitmap;
+
 public class MapActivity extends AppCompatActivity implements
         OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -62,11 +65,6 @@ public class MapActivity extends AppCompatActivity implements
     Marker mMarker;
     Marker circleMarker;
 
-    Button btnMark;
-    Button btnSatellite;
-    Button btnClear;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,15 +73,6 @@ public class MapActivity extends AppCompatActivity implements
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-        MyButtonOnClickListener myButtonOnClickListener = new MyButtonOnClickListener();
-        btnMark = (Button) findViewById(R.id.btn_mark);
-        btnMark.setOnClickListener(myButtonOnClickListener);
-        btnSatellite = (Button) findViewById(R.id.btn_satellite);
-        btnSatellite.setOnClickListener(myButtonOnClickListener);
-        btnClear = (Button) findViewById(R.id.btn_clear);
-        btnClear.setOnClickListener(myButtonOnClickListener);
-
 
         zoom = (ZoomControls) findViewById(R.id.zc_zoom);
 
@@ -109,11 +98,6 @@ public class MapActivity extends AppCompatActivity implements
                 .build();
 
         Log.d(LOG_TAG, " - In onCreate the result is : " + googleApiClient.toString());
-
-        locationRequest = new LocationRequest();
-        locationRequest.setInterval(2 * 1000);
-        locationRequest.setFastestInterval(500);
-        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 
 
     }
@@ -148,9 +132,6 @@ public class MapActivity extends AppCompatActivity implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        //LatLng sydney = new LatLng(-34, 151);
         LatLng neriya = new LatLng(31.9558506, 35.1263328);
         myLatitude = neriya.latitude;
         myLongitude = neriya.longitude;
@@ -162,7 +143,7 @@ public class MapActivity extends AppCompatActivity implements
 
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.n1);
         Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, (int) (bitmap.getWidth() * 0.3), (int) (bitmap.getHeight() * 0.3), true);
-        Bitmap circleBitmap = getCroppedBitmap(resizedBitmap);
+        Bitmap circleBitmap = getCircledBitmap(resizedBitmap);
 
 
         BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(circleBitmap);
@@ -179,76 +160,16 @@ public class MapActivity extends AppCompatActivity implements
         }
     }
 
-    public Bitmap getCroppedBitmap(Bitmap bitmap) {
-        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
-                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(output);
-
-        final int color = 0xff424242;
-        final Paint paint = new Paint();
-        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-
-        paint.setAntiAlias(true);
-        canvas.drawARGB(0, 0, 0, 0);
-        paint.setColor(color);
-
-        canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2,
-                bitmap.getWidth() / 2, paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(bitmap, rect, rect, paint);
-
-        return output;
-    }
-
-    public Bitmap getCircle(int radius) {
-
-        Bitmap output = Bitmap.createBitmap(radius*2,
-                radius*2, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(output);
-
-        int color = 0x40EF5350;
-        Paint paint = new Paint();
-        paint.setAntiAlias(true);
-        paint.setColor(color);
-        canvas.drawCircle(radius,radius,radius, paint);
-        return output;
-
-    }
 
 
-
-
-
-    private boolean checkPermission() {
-        if (permissionIsGranted) {
-            return permissionIsGranted;
-        }
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSION_LOCATION);
-            }
-        } else permissionIsGranted = true;
-
-        return permissionIsGranted;
-
-    }
-
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == MY_PERMISSION_LOCATION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                permissionIsGranted = true;
-            } else {
-                permissionIsGranted = false;
-                Toast.makeText(this, " This App request location Permission to be granted ", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
 
     private void requestLocationUpdate() {
         if (checkPermission()) {
+            locationRequest = new LocationRequest();
+            locationRequest.setInterval(2 * 1000);
+            locationRequest.setFastestInterval(500);
+            locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+
             LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest,  this);
         }
     }
@@ -273,61 +194,39 @@ public class MapActivity extends AppCompatActivity implements
         myLatitude = location.getLatitude();
         myLongitude = location.getLongitude();
         LatLng currentLocation = new LatLng(myLatitude, myLongitude);
-//        mMap.addMarker(new MarkerOptions()
-//                .position(currentLocation)
-//                .title("Current Location")
-//                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
         circleMarker.setPosition(currentLocation);
         mMarker.setPosition(currentLocation);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
     }
 
-
-
-    class MyButtonOnClickListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View view) {
-
-            switch (view.getId()) {
-                case R.id.btn_mark:
-                    LatLng myLocation = new LatLng(myLatitude, myLongitude);
-                    mMap.addMarker(new MarkerOptions().position(myLocation).title("Friend is here"));
-                    break;
-
-                case R.id.btn_satellite:
-                    if (mMap.getMapType() == GoogleMap.MAP_TYPE_NORMAL) {
-                        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-                        btnSatellite.setText("Normal");
-                    } else {
-                        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-                        btnSatellite.setText("Satellite");
-
-                    }
-                    break;
-                case R.id.btn_clear:
-                    mMap.clear();
-                    break;
-
+    private boolean checkPermission() {
+        if (permissionIsGranted) {
+            return permissionIsGranted;
+        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSION_LOCATION);
             }
+        } else permissionIsGranted = true;
+        return permissionIsGranted;
+    }
 
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == MY_PERMISSION_LOCATION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                permissionIsGranted = true;
+            } else {
+                permissionIsGranted = false;
+                Toast.makeText(this, " This App request location Permission to be granted ", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
-    void testPutLocation(Location location, String locationName) {
-        Marker locationMarker;
-
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
-        markerOptions.title(locationName + " Location");
-        //Put the Icon and color of Icon on the MAP
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-        locationMarker = mMap.addMarker(markerOptions);
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomBy(10));
 
 
-    }
+
+
+
 }

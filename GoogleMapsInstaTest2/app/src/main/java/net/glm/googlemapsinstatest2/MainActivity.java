@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         imageView = findViewById(R.id.imageView);
-        imageView.setImageBitmap(getCroppedBitmap(R.drawable.n1));
+        imageView.setImageBitmap(getCroppedBitmap(R.drawable.lion));
         imageView2 = findViewById(R.id.imageView2);
         imageView2.setImageBitmap(getCircle(50));
 
