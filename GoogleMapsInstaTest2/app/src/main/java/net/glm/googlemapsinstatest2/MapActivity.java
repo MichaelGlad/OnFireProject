@@ -18,6 +18,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -40,8 +42,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import net.glm.googlemapsinstatest2.Data.ModelUser1;
+
+import java.util.ArrayList;
+
 import static net.glm.googlemapsinstatest2.Utility.Utility.getCircle;
 import static net.glm.googlemapsinstatest2.Utility.Utility.getCircledBitmap;
+import static net.glm.googlemapsinstatest2.Utility.Utility.getResizebleCircleBitmap;
 
 public class MapActivity extends AppCompatActivity implements
         OnMapReadyCallback,
@@ -60,10 +67,19 @@ public class MapActivity extends AppCompatActivity implements
     private GoogleApiClient googleApiClient;
     private LocationRequest locationRequest;
 
+    private RecyclerView usersRecyclerView;
+    private LinearLayoutManager horizontalLinearLayoutManager;
+    private RecyclerviewUsersOnMapAdapter mapRecyclerAdapter;
+    ArrayList<ModelUser1> users;
+
+
 
     ZoomControls zoom;
     Marker mMarker;
     Marker circleMarker;
+
+    ArrayList<Marker> imageMarkers;
+    ArrayList<Marker> circleMarkers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,20 +91,31 @@ public class MapActivity extends AppCompatActivity implements
         mapFragment.getMapAsync(this);
 
         zoom = (ZoomControls) findViewById(R.id.zc_zoom);
-
         zoom.setOnZoomOutClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mMap.animateCamera(CameraUpdateFactory.zoomOut());
             }
         });
-
         zoom.setOnZoomInClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mMap.animateCamera(CameraUpdateFactory.zoomIn());
             }
         });
+
+        users = ModelUser1.getFakeUsers1();
+        usersRecyclerView = findViewById(R.id.recyclerview_users);
+        horizontalLinearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        usersRecyclerView.setLayoutManager(horizontalLinearLayoutManager);
+        mapRecyclerAdapter = new RecyclerviewUsersOnMapAdapter();
+        usersRecyclerView.setAdapter(mapRecyclerAdapter);
+        mapRecyclerAdapter.addAll(users);
+
+
+
+
+
 
 
         googleApiClient = new GoogleApiClient.Builder(this)
@@ -133,29 +160,11 @@ public class MapActivity extends AppCompatActivity implements
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         LatLng neriya = new LatLng(31.9558506, 35.1263328);
-        myLatitude = neriya.latitude;
-        myLongitude = neriya.longitude;
 
-        circleMarker = mMap.addMarker(new MarkerOptions()
-                .position(neriya)
-                .icon(BitmapDescriptorFactory.fromBitmap(getCircle(100))));
-        circleMarker.setAnchor(0.5f, 0.5f);
-
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.n1);
-        Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, (int) (bitmap.getWidth() * 0.3), (int) (bitmap.getHeight() * 0.3), true);
-        Bitmap circleBitmap = getCircledBitmap(resizedBitmap);
-
-
-        BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(circleBitmap);
-
-        mMarker = mMap.addMarker(new MarkerOptions()
-                .position(neriya)
-                .title("Marker in Neriya")
-                .icon(icon));
-        mMarker.setAnchor(0.5f, 0.5f);
+        imageMarkers = initImageMarkers(neriya);
+        circleMarkers = initCircleMarkers(neriya);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(neriya));
         if (checkPermission()) {
-
             mMap.setMyLocationEnabled(false);
         }
     }
@@ -169,7 +178,6 @@ public class MapActivity extends AppCompatActivity implements
             locationRequest.setInterval(2 * 1000);
             locationRequest.setFastestInterval(500);
             locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-
             LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest,  this);
         }
     }
@@ -191,11 +199,21 @@ public class MapActivity extends AppCompatActivity implements
 
     @Override
     public void onLocationChanged(Location location) {
-        myLatitude = location.getLatitude();
-        myLongitude = location.getLongitude();
-        LatLng currentLocation = new LatLng(myLatitude, myLongitude);
-        circleMarker.setPosition(currentLocation);
-        mMarker.setPosition(currentLocation);
+        Double latitude;
+        Double longitude;
+        LatLng currentLocation;
+
+        for (int i = 0; i< imageMarkers.size();i++){
+            latitude = location.getLatitude() + users.get(i).getShiftLat();
+            longitude = location.getLongitude() + users.get(i).getShiftLong();
+            currentLocation = new LatLng(latitude,longitude);
+            imageMarkers.get(i).setPosition(currentLocation);
+            circleMarkers.get(i).setPosition(currentLocation);
+
+        }
+
+        currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+
         mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
     }
 
@@ -224,6 +242,52 @@ public class MapActivity extends AppCompatActivity implements
         }
     }
 
+    private ArrayList<Marker> initImageMarkers (LatLng location){
+        ArrayList<Marker> markerArrayList = new ArrayList<>();
+        Marker marker ;
+        Double latitude;
+        Double longitude;
+        LatLng currentLocation;
+
+        for (ModelUser1 user: users){
+
+            Bitmap circleBitmap =  getResizebleCircleBitmap(BitmapFactory.decodeResource(getResources(),user.getImgId()));
+            BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(circleBitmap);
+            latitude = location.latitude + user.getShiftLat();
+            longitude = location.longitude + user.getShiftLong();
+            currentLocation = new LatLng(latitude, longitude);
+
+            marker = mMap.addMarker(new MarkerOptions()
+                    .position(currentLocation)
+                    .title(user.getName())
+                    .icon(icon));
+            marker.setAnchor(0.5f, 0.5f);
+            markerArrayList.add(marker);
+        }
+        return markerArrayList;
+    }
+
+    private ArrayList<Marker> initCircleMarkers (LatLng location){
+        ArrayList<Marker> markerArrayList = new ArrayList<>();
+        Marker marker ;
+        Double latitude;
+        Double longitude;
+        LatLng currentLocation;
+
+        for (ModelUser1 user: users){
+
+            latitude = location.latitude + user.getShiftLat();
+            longitude = location.longitude + user.getShiftLong();
+            currentLocation = new LatLng(latitude, longitude);
+
+            marker = mMap.addMarker(new MarkerOptions()
+                    .position(currentLocation)
+                    .icon(BitmapDescriptorFactory.fromBitmap(getCircle(user.getRadius()))));
+            marker.setAnchor(0.5f, 0.5f);
+            markerArrayList.add(marker);
+        }
+        return markerArrayList;
+    }
 
 
 

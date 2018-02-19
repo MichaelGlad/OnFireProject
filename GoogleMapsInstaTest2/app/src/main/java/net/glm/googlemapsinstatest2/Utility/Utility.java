@@ -1,11 +1,14 @@
 package net.glm.googlemapsinstatest2.Utility;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+
+import net.glm.googlemapsinstatest2.R;
 
 /**
  * Created by Michael on 18/02/2018.
@@ -46,6 +49,13 @@ public class Utility {
         paint.setColor(color);
         canvas.drawCircle(radius,radius,radius, paint);
         return output;
+
+    }
+
+    public static Bitmap getResizebleCircleBitmap(Bitmap inputBitmap){
+        Bitmap resizedBitmap = Bitmap.createScaledBitmap(inputBitmap, (int) (inputBitmap.getWidth() * 0.3), (int) (inputBitmap.getHeight() * 0.3), true);
+        Bitmap circleBitmap = getCircledBitmap(resizedBitmap);
+        return circleBitmap;
 
     }
 }

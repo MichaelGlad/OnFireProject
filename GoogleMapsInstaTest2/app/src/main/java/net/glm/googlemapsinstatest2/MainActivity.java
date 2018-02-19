@@ -14,6 +14,8 @@ import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +24,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+
+import static net.glm.googlemapsinstatest2.Utility.Utility.*;
 
 public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = "MapsTest1_MainActivity";
@@ -32,6 +36,10 @@ public class MainActivity extends AppCompatActivity {
     ImageView imageView;
     ImageView imageView2;
 
+    private RecyclerView usersRecyclerView;
+    private LinearLayoutManager horizontalLinearLayoutManager;
+    private RecyclerviewUsersOnMapAdapter mapRecyclerAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +47,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         imageView = findViewById(R.id.imageView);
-        imageView.setImageBitmap(getCroppedBitmap(R.drawable.lion));
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.onfireapp);
+        imageView.setImageBitmap(getCircledBitmap(bitmap));
         imageView2 = findViewById(R.id.imageView2);
         imageView2.setImageBitmap(getCircle(50));
 
@@ -81,42 +90,5 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    public Bitmap getCroppedBitmap(int resource) {
 
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),resource);
-
-        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
-                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(output);
-
-        final int color = 0xFFFFFFFF;
-        final Paint paint = new Paint();
-        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-
-        paint.setAntiAlias(true);
-        canvas.drawARGB(0, 0, 0, 0);
-        paint.setColor(color);
-
-        canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2,
-                bitmap.getWidth() / 2, paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(bitmap, 0, 0, paint);
-
-        return output;
-    }
-
-    public Bitmap getCircle(int radius) {
-
-        Bitmap output = Bitmap.createBitmap(radius*2,
-                radius*2, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(output);
-
-        int color = 0x40EF5350;
-        Paint paint = new Paint();
-        paint.setAntiAlias(true);
-        paint.setColor(color);
-        canvas.drawCircle(radius,radius,radius, paint);
-        return output;
-
-    }
 }
