@@ -111,6 +111,7 @@ public class MapActivity extends AppCompatActivity implements
         mapRecyclerAdapter = new RecyclerviewUsersOnMapAdapter();
         usersRecyclerView.setAdapter(mapRecyclerAdapter);
         mapRecyclerAdapter.addAll(users);
+        usersRecyclerView.setVisibility(View.GONE);
 
 
 
@@ -167,6 +168,7 @@ public class MapActivity extends AppCompatActivity implements
         if (checkPermission()) {
             mMap.setMyLocationEnabled(false);
         }
+        mMap.setOnMarkerClickListener(new MyMarkerClickListener());
     }
 
 
@@ -249,19 +251,20 @@ public class MapActivity extends AppCompatActivity implements
         Double longitude;
         LatLng currentLocation;
 
-        for (ModelUser1 user: users){
+        for (int i = 0; i< users.size();i++){
 
-            Bitmap circleBitmap =  getResizebleCircleBitmap(BitmapFactory.decodeResource(getResources(),user.getImgId()));
+            Bitmap circleBitmap =  getResizebleCircleBitmap(BitmapFactory.decodeResource(getResources(),users.get(i).getImgId()));
             BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(circleBitmap);
-            latitude = location.latitude + user.getShiftLat();
-            longitude = location.longitude + user.getShiftLong();
+            latitude = location.latitude + users.get(i).getShiftLat();
+            longitude = location.longitude + users.get(i).getShiftLong();
             currentLocation = new LatLng(latitude, longitude);
 
             marker = mMap.addMarker(new MarkerOptions()
                     .position(currentLocation)
-                    .title(user.getName())
+                    .title(users.get(i).getName())
                     .icon(icon));
             marker.setAnchor(0.5f, 0.5f);
+            marker.setTag((Integer) i);
             markerArrayList.add(marker);
         }
         return markerArrayList;
@@ -288,6 +291,23 @@ public class MapActivity extends AppCompatActivity implements
         }
         return markerArrayList;
     }
+
+    public class MyMarkerClickListener implements GoogleMap.OnMarkerClickListener{
+
+        @Override
+        public boolean onMarkerClick(Marker marker) {
+            if(marker.getTag() != null) {
+                Integer position;
+                usersRecyclerView.setVisibility(View.VISIBLE);
+                position = (Integer) marker.getTag();
+                usersRecyclerView.smoothScrollToPosition(position);
+            }
+            return false;
+        }
+    }
+
+
+
 
 
 

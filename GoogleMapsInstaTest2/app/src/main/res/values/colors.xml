@@ -5,4 +5,8 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="colorBlueGrey_200">#B0BEC5</color>
+    <color name="colorPrimaryRed_500">#F44336</color>
+    <color name="colorPrimaryRedLight_200">#EF9A9A</color>
+    <color name="colorPrimaryRedDark_900">#B71C1C</color>
+    
 </resources>
