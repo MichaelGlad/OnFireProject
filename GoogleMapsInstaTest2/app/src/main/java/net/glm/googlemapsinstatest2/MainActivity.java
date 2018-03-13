@@ -28,7 +28,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import static net.glm.googlemapsinstatest2.Utility.Utility.*;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String LOG_TAG = "MapsTest1_MainActivity";
+    private static final String LOG_TAG = "MapsTest";
     private static final int ERROR_DIALOG_REQUEST = 901;
 
 
@@ -48,9 +48,10 @@ public class MainActivity extends AppCompatActivity {
 
         imageView = findViewById(R.id.imageView);
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.onfireapp);
-        imageView.setImageBitmap(getCircledBitmap(bitmap));
+        Bitmap catBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.cat);
+        imageView.setImageBitmap(getCircledBitmap2(catBitmap, (int) ( 30*getResources().getDisplayMetrics().density)));
         imageView2 = findViewById(R.id.imageView2);
-        imageView2.setImageBitmap(getCircle(50));
+        imageView2.setImageBitmap(getCircledBitmap2(catBitmap, (int) ( 100*getResources().getDisplayMetrics().density)));
 
         if (isServicesAvailable()){
             init();
