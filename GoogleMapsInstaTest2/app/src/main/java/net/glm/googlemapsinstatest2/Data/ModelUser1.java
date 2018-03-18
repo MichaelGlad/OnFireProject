@@ -49,12 +49,12 @@ public class ModelUser1 {
 
     public static ArrayList<ModelUser1> getFakeUsers1(){
         ArrayList<ModelUser1> usersList = new ArrayList<>();
-        usersList.add(new ModelUser1("OnFire", R.drawable.onfireapp,0,0,100));
-        usersList.add(new ModelUser1("Lion", R.drawable.lion,0.0070d,0.0050d,60));
-        usersList.add(new ModelUser1("Tiger", R.drawable.tiger,-0.0070d,-0.0080d,140));
-        usersList.add(new ModelUser1("Dog", R.drawable.dog,0.01d,0d,100));
-        usersList.add(new ModelUser1("Cat", R.drawable.cat,-0.012d,0.0020d,100));
-        usersList.add(new ModelUser1("Fine", R.drawable.fine,0.012d,-0.0040d,200));
+        usersList.add(new ModelUser1("OnFire", R.drawable.onfireapp,0,0,120));
+        usersList.add(new ModelUser1("User_1", R.drawable.user1,0.0050d,0.0070d,60));
+        usersList.add(new ModelUser1("User_2", R.drawable.user2,-0.0070d,-0.0080d,140));
+        usersList.add(new ModelUser1("User_3", R.drawable.user3,0.01d,0.0030d,100));
+        usersList.add(new ModelUser1("User_4", R.drawable.user4,-0.010d,0.0020d,120));
+        usersList.add(new ModelUser1("User_5", R.drawable.user5,0.010d,-0.0050d,200));
 
         return usersList;
     }

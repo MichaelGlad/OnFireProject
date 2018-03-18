@@ -8,5 +8,7 @@
     <color name="colorPrimaryRed_500">#F44336</color>
     <color name="colorPrimaryRedLight_200">#EF9A9A</color>
     <color name="colorPrimaryRedDark_900">#B71C1C</color>
+    <color name="colorBorder">#BD1717</color>
+    <color name="colorWhite">#FFFFFF</color>
     
 </resources>

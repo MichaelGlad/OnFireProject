@@ -1,79 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_user"
-    android:layout_width="160dp"
+    android:layout_width="270dp"
     android:layout_height="90dp"
     android:layout_margin="8dp"
-    card_view:cardBackgroundColor="@color/colorBlueGrey_200"
-    card_view:cardCornerRadius="8dp"
-    card_view:cardElevation="2dp">
+    android:elevation="4dp"
+    card_view:cardCornerRadius="4dp">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/user_card_background">
 
         <ImageView
             android:id="@+id/image_view_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
             card_view:layout_constraintLeft_toLeftOf="parent"
             card_view:layout_constraintTop_toTopOf="parent"
             card_view:srcCompat="@drawable/onfireapp" />
 
         <TextView
-            android:id="@+id/tv_name"
+            android:id="@+id/tv_card_user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="Name"
-            card_view:layout_constraintRight_toRightOf="parent"
             card_view:layout_constraintStart_toEndOf="@+id/image_view_user"
             card_view:layout_constraintTop_toTopOf="@+id/image_view_user" />
 
-        <Button
-            android:id="@+id/btn1"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="22dp"
-            android:layout_marginStart="16dp"
-            android:text="A"
-            card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintEnd_toStartOf="@+id/btn2"
-            card_view:layout_constraintHorizontal_bias="0.5"
-            card_view:layout_constraintHorizontal_chainStyle="packed"
-            card_view:layout_constraintStart_toStartOf="parent" />
+        <TextView
+            android:id="@+id/tv_card_user_age"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="Age"
+            card_view:layout_constraintStart_toEndOf="@+id/tv_card_user_name"
+            card_view:layout_constraintTop_toTopOf="@+id/tv_card_user_name" />
 
-        <Button
-            android:id="@+id/btn2"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="22dp"
-            android:text="B"
-            android:textAlignment="center"
-            card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintEnd_toStartOf="@+id/btn3"
-            card_view:layout_constraintHorizontal_bias="0.5"
-            card_view:layout_constraintStart_toEndOf="@+id/btn1" />
+        <TextView
+            android:id="@+id/tv_card_distance_to"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="3 km"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintTop_toTopOf="@+id/tv_card_user_age" />
 
-        <Button
-            android:id="@+id/btn3"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+        <TextView
+            android:id="@+id/tv_card_permanent_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Status :"
+            card_view:layout_constraintStart_toEndOf="@+id/image_view_user"
+            card_view:layout_constraintTop_toBottomOf="@+id/tv_card_user_name" />
+
+        <TextView
+            android:id="@+id/tv_card_user_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp"
+            android:text="only talk"
+            card_view:layout_constraintStart_toEndOf="@+id/tv_card_permanent_status"
+            card_view:layout_constraintTop_toBottomOf="@+id/tv_card_user_name" />
+
+        <ImageView
+            android:id="@+id/iv_card_hide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:layout_marginEnd="16dp"
-            android:gravity="center"
-            android:text="C"
+            android:layout_marginEnd="8dp"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintEnd_toStartOf="@+id/iv_card_rocket"
+            card_view:srcCompat="@drawable/ic_hide" />
+
+        <ImageView
+            android:id="@+id/iv_card_rocket"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintEnd_toStartOf="@+id/iv_card_find_user"
+            card_view:srcCompat="@drawable/ic_rocket" />
+
+        <ImageView
+            android:id="@+id/iv_card_find_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintEnd_toStartOf="@+id/iv_card_speech_bubble"
+            card_view:srcCompat="@drawable/ic_find_user_female" />
+
+        <ImageView
+            android:id="@+id/iv_card_speech_bubble"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintHorizontal_bias="0.5"
-            card_view:layout_constraintStart_toEndOf="@+id/btn2" />
+            card_view:srcCompat="@drawable/ic_speech_bubble" />
 
     </android.support.constraint.ConstraintLayout>
 

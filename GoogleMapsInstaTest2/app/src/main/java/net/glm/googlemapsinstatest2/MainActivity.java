@@ -49,9 +49,9 @@ public class MainActivity extends AppCompatActivity {
         imageView = findViewById(R.id.imageView);
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.onfireapp);
         Bitmap catBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.cat);
-        imageView.setImageBitmap(getCircledBitmap2(catBitmap, (int) ( 30*getResources().getDisplayMetrics().density)));
+        imageView.setImageBitmap(getResizebleCircleBitmap(catBitmap, (int) ( 30*getResources().getDisplayMetrics().density)));
         imageView2 = findViewById(R.id.imageView2);
-        imageView2.setImageBitmap(getCircledBitmap2(catBitmap, (int) ( 100*getResources().getDisplayMetrics().density)));
+        imageView2.setImageBitmap(getResizebleCircleBitmap(catBitmap, (int) ( 100*getResources().getDisplayMetrics().density)));
 
         if (isServicesAvailable()){
             init();

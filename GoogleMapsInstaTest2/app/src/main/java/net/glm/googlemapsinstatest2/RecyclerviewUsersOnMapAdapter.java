@@ -55,13 +55,14 @@ public class RecyclerviewUsersOnMapAdapter extends RecyclerView.Adapter<Recycler
 
         public RecyclerViewUsersViewHoder(View itemView) {
             super(itemView);
-            userName = itemView.findViewById(R.id.tv_name);
+            userName = itemView.findViewById(R.id.tv_card_user_name);
             userImage = itemView.findViewById(R.id.image_view_user);
         }
 
         public void bind (ModelUser1 user){
             userName.setText(user.getName());
-            Bitmap circleBitmap =  getResizebleCircleBitmap(BitmapFactory.decodeResource(itemView.getResources(), user.getImgId()));
+            Bitmap circleBitmap =  getResizebleCircleBitmap(BitmapFactory.decodeResource(itemView.getResources(), user.getImgId()),
+                    (int) ( 30*itemView.getResources().getDisplayMetrics().density));
             userImage.setImageBitmap(circleBitmap);
 
         }

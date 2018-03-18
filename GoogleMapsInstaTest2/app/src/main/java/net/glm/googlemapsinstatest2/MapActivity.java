@@ -19,7 +19,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -73,7 +75,6 @@ public class MapActivity extends AppCompatActivity implements
     ArrayList<ModelUser1> users;
 
 
-
     ZoomControls zoom;
     Marker mMarker;
     Marker circleMarker;
@@ -111,12 +112,10 @@ public class MapActivity extends AppCompatActivity implements
         mapRecyclerAdapter = new RecyclerviewUsersOnMapAdapter();
         usersRecyclerView.setAdapter(mapRecyclerAdapter);
         mapRecyclerAdapter.addAll(users);
+        SnapHelper snapHelper = new LinearSnapHelper();
+        snapHelper.attachToRecyclerView(usersRecyclerView);
+
         usersRecyclerView.setVisibility(View.GONE);
-
-
-
-
-
 
 
         googleApiClient = new GoogleApiClient.Builder(this)
@@ -164,14 +163,12 @@ public class MapActivity extends AppCompatActivity implements
 
         imageMarkers = initImageMarkers(neriya);
         circleMarkers = initCircleMarkers(neriya);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(neriya));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(neriya, 14));
         if (checkPermission()) {
             mMap.setMyLocationEnabled(false);
         }
         mMap.setOnMarkerClickListener(new MyMarkerClickListener());
     }
-
-
 
 
     private void requestLocationUpdate() {
@@ -180,7 +177,7 @@ public class MapActivity extends AppCompatActivity implements
             locationRequest.setInterval(2 * 1000);
             locationRequest.setFastestInterval(500);
             locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-            LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest,  this);
+            LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
         }
     }
 
@@ -205,10 +202,10 @@ public class MapActivity extends AppCompatActivity implements
         Double longitude;
         LatLng currentLocation;
 
-        for (int i = 0; i< imageMarkers.size();i++){
+        for (int i = 0; i < imageMarkers.size(); i++) {
             latitude = location.getLatitude() + users.get(i).getShiftLat();
             longitude = location.getLongitude() + users.get(i).getShiftLong();
-            currentLocation = new LatLng(latitude,longitude);
+            currentLocation = new LatLng(latitude, longitude);
             imageMarkers.get(i).setPosition(currentLocation);
             circleMarkers.get(i).setPosition(currentLocation);
 
@@ -244,16 +241,17 @@ public class MapActivity extends AppCompatActivity implements
         }
     }
 
-    private ArrayList<Marker> initImageMarkers (LatLng location){
+    private ArrayList<Marker> initImageMarkers(LatLng location) {
         ArrayList<Marker> markerArrayList = new ArrayList<>();
-        Marker marker ;
+        Marker marker;
         Double latitude;
         Double longitude;
         LatLng currentLocation;
 
-        for (int i = 0; i< users.size();i++){
+        for (int i = 0; i < users.size(); i++) {
 
-            Bitmap circleBitmap =  getResizebleCircleBitmap(BitmapFactory.decodeResource(getResources(),users.get(i).getImgId()));
+            Bitmap circleBitmap = getResizebleCircleBitmap(BitmapFactory.decodeResource(getResources(), users.get(i).getImgId()),
+                    (int) (30 * this.getResources().getDisplayMetrics().density));
             BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(circleBitmap);
             latitude = location.latitude + users.get(i).getShiftLat();
             longitude = location.longitude + users.get(i).getShiftLong();
@@ -262,7 +260,10 @@ public class MapActivity extends AppCompatActivity implements
             marker = mMap.addMarker(new MarkerOptions()
                     .position(currentLocation)
                     .title(users.get(i).getName())
-                    .icon(icon));
+                    .icon(icon)
+                    .zIndex(1.0f)
+            );
+
             marker.setAnchor(0.5f, 0.5f);
             marker.setTag((Integer) i);
             markerArrayList.add(marker);
@@ -270,14 +271,14 @@ public class MapActivity extends AppCompatActivity implements
         return markerArrayList;
     }
 
-    private ArrayList<Marker> initCircleMarkers (LatLng location){
+    private ArrayList<Marker> initCircleMarkers(LatLng location) {
         ArrayList<Marker> markerArrayList = new ArrayList<>();
-        Marker marker ;
+        Marker marker;
         Double latitude;
         Double longitude;
         LatLng currentLocation;
 
-        for (ModelUser1 user: users){
+        for (ModelUser1 user : users) {
 
             latitude = location.latitude + user.getShiftLat();
             longitude = location.longitude + user.getShiftLong();
@@ -292,11 +293,11 @@ public class MapActivity extends AppCompatActivity implements
         return markerArrayList;
     }
 
-    public class MyMarkerClickListener implements GoogleMap.OnMarkerClickListener{
+    public class MyMarkerClickListener implements GoogleMap.OnMarkerClickListener {
 
         @Override
         public boolean onMarkerClick(Marker marker) {
-            if(marker.getTag() != null) {
+            if (marker.getTag() != null) {
                 Integer position;
                 usersRecyclerView.setVisibility(View.VISIBLE);
                 position = (Integer) marker.getTag();
@@ -305,12 +306,6 @@ public class MapActivity extends AppCompatActivity implements
             return false;
         }
     }
-
-
-
-
-
-
 
 
 }
