@@ -1,16 +1,12 @@
 package net.glm.googlemapsinstatest2;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
+
+import android.graphics.PointF;
 import android.location.Location;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -19,9 +15,12 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSnapHelper;
+import android.support.v7.widget.LinearSmoothScroller;
+import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
+import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -48,14 +47,15 @@ import net.glm.googlemapsinstatest2.Data.ModelUser1;
 
 import java.util.ArrayList;
 
-import static net.glm.googlemapsinstatest2.Utility.Utility.getCircle;
-import static net.glm.googlemapsinstatest2.Utility.Utility.getCircledBitmap;
-import static net.glm.googlemapsinstatest2.Utility.Utility.getResizebleCircleBitmap;
+import static net.glm.googlemapsinstatest2.Utility.Utility.*;
+
 
 public class MapActivity extends AppCompatActivity implements
         OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener {
+        GoogleApiClient.OnConnectionFailedListener,
+        LocationListener,
+        GoogleMap.OnMapClickListener{
 
     static final int MY_PERMISSION_LOCATION = 102;
     static final String LOG_TAG = "MapActivity";
@@ -107,12 +107,16 @@ public class MapActivity extends AppCompatActivity implements
 
         users = ModelUser1.getFakeUsers1();
         usersRecyclerView = findViewById(R.id.recyclerview_users);
+//        MyCustomLayoutManager myCustomLayoutManager = new MyCustomLayoutManager(this);
+//        myCustomLayoutManager.setOrientation(MyCustomLayoutManager.HORIZONTAL);
         horizontalLinearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         usersRecyclerView.setLayoutManager(horizontalLinearLayoutManager);
+//        usersRecyclerView.setLayoutManager(myCustomLayoutManager);
         mapRecyclerAdapter = new RecyclerviewUsersOnMapAdapter();
         usersRecyclerView.setAdapter(mapRecyclerAdapter);
         mapRecyclerAdapter.addAll(users);
-        SnapHelper snapHelper = new LinearSnapHelper();
+
+        PagerSnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(usersRecyclerView);
 
         usersRecyclerView.setVisibility(View.GONE);
@@ -168,6 +172,7 @@ public class MapActivity extends AppCompatActivity implements
             mMap.setMyLocationEnabled(false);
         }
         mMap.setOnMarkerClickListener(new MyMarkerClickListener());
+        mMap.setOnMapClickListener(this);
     }
 
 
@@ -293,6 +298,14 @@ public class MapActivity extends AppCompatActivity implements
         return markerArrayList;
     }
 
+    @Override
+    public void onMapClick(LatLng latLng) {
+        if(usersRecyclerView.getVisibility() == View.VISIBLE){
+            usersRecyclerView.setVisibility(View.INVISIBLE);
+        }
+
+    }
+
     public class MyMarkerClickListener implements GoogleMap.OnMarkerClickListener {
 
         @Override
@@ -302,10 +315,55 @@ public class MapActivity extends AppCompatActivity implements
                 usersRecyclerView.setVisibility(View.VISIBLE);
                 position = (Integer) marker.getTag();
                 usersRecyclerView.smoothScrollToPosition(position);
+
             }
             return false;
         }
     }
+
+    public class MyCustomLayoutManager extends LinearLayoutManager {
+        //We need mContext to create our LinearSmoothScroller
+        private static final float MILLISECONDS_PER_INCH = 40f;
+        private Context mContext;
+
+        public MyCustomLayoutManager(Context context) {
+            super(context);
+            mContext = context;
+        }
+
+        //Override this method? Check.
+        @Override
+        public void smoothScrollToPosition(RecyclerView recyclerView,
+                                           RecyclerView.State state, int position) {
+
+            //Create your RecyclerView.SmoothScroller instance? Check.
+            LinearSmoothScroller smoothScroller =
+                    new LinearSmoothScroller(mContext) {
+
+                        //Automatically implements this method on instantiation.
+                        @Override
+                        public PointF computeScrollVectorForPosition
+                        (int targetPosition) {
+                            return MyCustomLayoutManager.this.computeScrollVectorForPosition
+                                    (targetPosition);
+                        }
+
+                        @Override
+                        protected float calculateSpeedPerPixel
+                                (DisplayMetrics displayMetrics) {
+                            return MILLISECONDS_PER_INCH/displayMetrics.densityDpi;
+                        }
+                    };
+
+            //Docs do not tell us anything about this,
+            //but we need to set the position we want to scroll to.
+            smoothScroller.setTargetPosition(position);
+
+            //Call startSmoothScroll(SmoothScroller)? Check.
+            startSmoothScroll(smoothScroller);
+        }
+    }
+
 
 
 }

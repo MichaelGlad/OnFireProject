@@ -11,6 +11,9 @@ import android.util.Log;
 
 import net.glm.googlemapsinstatest2.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Michael on 18/02/2018.
  */
@@ -83,6 +86,30 @@ public class Utility {
         canvas.drawCircle(radius,radius,radius, paint);
         return output;
 
+    }
+
+    public static List<Integer> getPicturesList (){
+        List <Integer> outputPicturesList =new ArrayList<>();
+
+        outputPicturesList.add(R.drawable.image_1);
+        outputPicturesList.add(R.drawable.image_2);
+        outputPicturesList.add(R.drawable.image_3);
+        outputPicturesList.add(R.drawable.image_4);
+        outputPicturesList.add(R.drawable.image_5);
+        outputPicturesList.add(R.drawable.image_6);
+        outputPicturesList.add(R.drawable.image_7);
+        outputPicturesList.add(R.drawable.image_8);
+        outputPicturesList.add(R.drawable.image_9);
+        outputPicturesList.add(R.drawable.image_10);
+        outputPicturesList.add(R.drawable.image_11);
+        outputPicturesList.add(R.drawable.image_12);
+        outputPicturesList.add(R.drawable.image_13);
+        outputPicturesList.add(R.drawable.image_14);
+        outputPicturesList.add(R.drawable.image_15);
+        outputPicturesList.add(R.drawable.image_16);
+        outputPicturesList.add(R.drawable.image_17);
+
+        return  outputPicturesList;
     }
 
 

@@ -15,6 +15,8 @@ public class ModelUser1 {
     private double shiftLat;
     private double shiftLong;
     private int radius;
+    private String status;
+    private int age;
 
 
     private ModelUser1(String name, int imgId, double shiftX, double shiftY, int radius) {
