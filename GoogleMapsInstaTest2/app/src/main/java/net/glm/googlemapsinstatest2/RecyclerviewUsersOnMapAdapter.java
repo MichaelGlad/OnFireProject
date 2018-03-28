@@ -61,8 +61,7 @@ public class RecyclerviewUsersOnMapAdapter extends RecyclerView.Adapter<Recycler
 
         public void bind (ModelUser1 user){
             userName.setText(user.getName());
-            Bitmap circleBitmap =  getResizebleCircleBitmap(BitmapFactory.decodeResource(itemView.getResources(), user.getImgId()),
-                    (int) ( 30*itemView.getResources().getDisplayMetrics().density));
+            Bitmap circleBitmap =  getResizebleCircleBitmap(BitmapFactory.decodeResource(itemView.getResources(), user.getImgId()),(int)  30);
             userImage.setImageBitmap(circleBitmap);
 
         }

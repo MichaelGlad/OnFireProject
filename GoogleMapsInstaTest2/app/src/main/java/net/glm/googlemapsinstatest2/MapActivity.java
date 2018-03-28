@@ -256,7 +256,7 @@ public class MapActivity extends AppCompatActivity implements
         for (int i = 0; i < users.size(); i++) {
 
             Bitmap circleBitmap = getResizebleCircleBitmap(BitmapFactory.decodeResource(getResources(), users.get(i).getImgId()),
-                    (int) (30 * this.getResources().getDisplayMetrics().density));
+                    (int) 30 );
             BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(circleBitmap);
             latitude = location.latitude + users.get(i).getShiftLat();
             longitude = location.longitude + users.get(i).getShiftLong();

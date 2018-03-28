@@ -1,5 +1,6 @@
 package net.glm.googlemapsinstatest2.Utility;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -7,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 import net.glm.googlemapsinstatest2.R;
@@ -44,27 +46,30 @@ public class Utility {
         return output;
     }
 
-    public static Bitmap getResizebleCircleBitmap (Bitmap inputBitmap, int circleRadiusInPx) {
+    public static Bitmap getResizebleCircleBitmap (Bitmap inputBitmap, int circleRadiusInDP) {
+
+        DisplayMetrics displayMetrics = Resources.getSystem().getDisplayMetrics();
+        int circleRadiusInPixel = (int) (circleRadiusInDP*displayMetrics.density);
 
         float minimumSideSizeOfBitmap = (float) Math.min(inputBitmap.getHeight(), inputBitmap.getWidth());
-        float multiplyCoefficient = ((circleRadiusInPx * 2) / minimumSideSizeOfBitmap);
+        float multiplyCoefficient = ((circleRadiusInPixel * 2) / minimumSideSizeOfBitmap);
 
         Bitmap resizedInputBitmap = Bitmap.createScaledBitmap(inputBitmap, (int) (inputBitmap.getWidth() * multiplyCoefficient),
                 (int) (inputBitmap.getHeight() * multiplyCoefficient), true);
 
-        Bitmap outputBitmap = Bitmap.createBitmap(circleRadiusInPx*2,
-                circleRadiusInPx*2, Bitmap.Config.ARGB_8888);
+        Bitmap outputBitmap = Bitmap.createBitmap(circleRadiusInPixel*2,
+                circleRadiusInPixel*2, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(outputBitmap);
 
         final int color = 0xff424242;
         final Paint paint = new Paint();
-        final Rect rect = new Rect(0, 0, circleRadiusInPx*2, circleRadiusInPx*2);
+        final Rect rect = new Rect(0, 0, circleRadiusInPixel*2, circleRadiusInPixel*2);
 
         paint.setAntiAlias(true);
         canvas.drawARGB(0, 0, 0, 0);
         paint.setColor(color);
 
-        canvas.drawCircle(circleRadiusInPx,circleRadiusInPx,circleRadiusInPx, paint);
+        canvas.drawCircle(circleRadiusInPixel,circleRadiusInPixel,circleRadiusInPixel, paint);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(resizedInputBitmap, rect, rect, paint);
 
