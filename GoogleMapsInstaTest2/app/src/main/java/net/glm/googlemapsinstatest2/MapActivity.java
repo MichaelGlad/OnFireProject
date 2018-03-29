@@ -18,12 +18,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SnapHelper;
-import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 import android.widget.ZoomControls;
 
@@ -38,12 +35,11 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import net.glm.googlemapsinstatest2.Data.ModelUser1;
+import net.glm.googlemapsinstatest2.Data.ModelUser;
 
 import java.util.ArrayList;
 
@@ -72,7 +68,7 @@ public class MapActivity extends AppCompatActivity implements
     private RecyclerView usersRecyclerView;
     private LinearLayoutManager horizontalLinearLayoutManager;
     private RecyclerviewUsersOnMapAdapter mapRecyclerAdapter;
-    ArrayList<ModelUser1> users;
+    ArrayList<ModelUser> users;
 
 
     ZoomControls zoom;
@@ -105,7 +101,7 @@ public class MapActivity extends AppCompatActivity implements
             }
         });
 
-        users = ModelUser1.getFakeUsers1();
+        users = ModelUser.getFakeUsers1();
         usersRecyclerView = findViewById(R.id.recyclerview_users);
 //        MyCustomLayoutManager myCustomLayoutManager = new MyCustomLayoutManager(this);
 //        myCustomLayoutManager.setOrientation(MyCustomLayoutManager.HORIZONTAL);
@@ -283,7 +279,7 @@ public class MapActivity extends AppCompatActivity implements
         Double longitude;
         LatLng currentLocation;
 
-        for (ModelUser1 user : users) {
+        for (ModelUser user : users) {
 
             latitude = location.latitude + user.getShiftLat();
             longitude = location.longitude + user.getShiftLong();

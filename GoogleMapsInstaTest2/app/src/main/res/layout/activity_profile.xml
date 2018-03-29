@@ -14,7 +14,7 @@
         android:background="@color/colorRedForProfile">
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/iv_profile_headline_user_image"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginLeft="16dp"
@@ -56,12 +56,13 @@
 
             <TextView
                 android:id="@+id/tv_profile_headline_status_data"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="@dimen/big_text_in_headline"
-                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
                 android:text="Only a cap of coffee"
+                android:textSize="@dimen/big_text_in_headline"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/imageView5"
                 app:layout_constraintStart_toStartOf="@+id/tv_profile_headline_status_tag"
                 app:layout_constraintTop_toBottomOf="@+id/tv_profile_headline_status_tag" />
 
@@ -199,7 +200,8 @@
         android:id="@+id/rv_in_profile_activity"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:scrollbars="vertical">
 
     </android.support.v7.widget.RecyclerView>
 

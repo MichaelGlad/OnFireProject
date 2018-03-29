@@ -29,18 +29,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:text="Name"
             card_view:layout_constraintStart_toEndOf="@+id/image_view_user"
-            card_view:layout_constraintTop_toTopOf="@+id/image_view_user" />
+            card_view:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_card_user_age"
+            android:id="@+id/tv_card_user_age_tag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="8dp"
             android:text="Age"
             card_view:layout_constraintStart_toEndOf="@+id/tv_card_user_name"
             card_view:layout_constraintTop_toTopOf="@+id/tv_card_user_name" />
+
+        <TextView
+            android:id="@+id/tv_card_user_age_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="20"
+            card_view:layout_constraintStart_toEndOf="@+id/tv_card_user_age_tag"
+            card_view:layout_constraintTop_toTopOf="@+id/tv_card_user_age_tag" />
 
         <TextView
             android:id="@+id/tv_card_distance_to"
@@ -49,10 +59,10 @@
             android:layout_marginEnd="8dp"
             android:text="3 km"
             card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintTop_toTopOf="@+id/tv_card_user_age" />
+            card_view:layout_constraintTop_toTopOf="@+id/tv_card_user_age_tag" />
 
         <TextView
-            android:id="@+id/tv_card_permanent_status"
+            android:id="@+id/tv_card_user_status_tag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -62,14 +72,13 @@
             card_view:layout_constraintTop_toBottomOf="@+id/tv_card_user_name" />
 
         <TextView
-            android:id="@+id/tv_card_user_status"
+            android:id="@+id/tv_card_user_status_data"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="18dp"
             android:layout_marginStart="4dp"
-            android:layout_marginTop="8dp"
-            android:text="only talk"
-            card_view:layout_constraintStart_toEndOf="@+id/tv_card_permanent_status"
-            card_view:layout_constraintTop_toBottomOf="@+id/tv_card_user_name" />
+            android:text="We will connect people in the world"
+            card_view:layout_constraintStart_toEndOf="@+id/tv_card_user_status_tag"
+            card_view:layout_constraintTop_toTopOf="@+id/tv_card_user_status_tag" />
 
         <ImageView
             android:id="@+id/iv_card_hide"
@@ -110,6 +119,7 @@
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:srcCompat="@drawable/ic_speech_bubble" />
+
 
     </android.support.constraint.ConstraintLayout>
 
