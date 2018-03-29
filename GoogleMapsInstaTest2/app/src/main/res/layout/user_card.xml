@@ -22,7 +22,9 @@
             android:layout_marginTop="8dp"
             card_view:layout_constraintLeft_toLeftOf="parent"
             card_view:layout_constraintTop_toTopOf="parent"
-            card_view:srcCompat="@drawable/onfireapp" />
+            card_view:srcCompat="@drawable/onfireapp"
+            android:transitionName="@string/shared_map_to_profile_user_image"/>
+
 
         <TextView
             android:id="@+id/tv_card_user_name"
@@ -32,7 +34,8 @@
             android:layout_marginTop="8dp"
             android:text="Name"
             card_view:layout_constraintStart_toEndOf="@+id/image_view_user"
-            card_view:layout_constraintTop_toTopOf="parent" />
+            card_view:layout_constraintTop_toTopOf="parent"
+            android:transitionName="@string/shared_map_to_profile_user_name"/>
 
         <TextView
             android:id="@+id/tv_card_user_age_tag"
@@ -78,7 +81,8 @@
             android:layout_marginStart="4dp"
             android:text="We will connect people in the world"
             card_view:layout_constraintStart_toEndOf="@+id/tv_card_user_status_tag"
-            card_view:layout_constraintTop_toTopOf="@+id/tv_card_user_status_tag" />
+            card_view:layout_constraintTop_toTopOf="@+id/tv_card_user_status_tag"
+            android:transitionName="@string/shared_map_to_profile_user_status"/>
 
         <ImageView
             android:id="@+id/iv_card_hide"

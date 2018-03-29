@@ -1,9 +1,14 @@
 package net.glm.googlemapsinstatest2;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,11 +84,19 @@ public class RecyclerviewUsersOnMapAdapter extends RecyclerView.Adapter<Recycler
         }
 
         @Override
-        public void onClick(View v) {
+        public void onClick(View view) {
 
-            Intent intent = new Intent(v.getContext(),ProfileActivity.class);
+            Intent intent = new Intent(view.getContext(),ProfileActivity.class);
             intent.putExtra(USER_NUMBER,getAdapterPosition());
-            v.getContext().startActivity(intent);
+            if(Build.VERSION.SDK_INT >= 21){
+                Pair<View,String> imagePair = Pair.create((View) userImage, userImage.getTransitionName());
+                Pair<View,String> namePair = Pair.create((View) userName, userName.getTransitionName());
+                Pair<View,String> statusPair = Pair.create((View) userStatus, userStatus.getTransitionName());
+
+                ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) view.getContext(), imagePair,namePair,statusPair);
+                view.getContext().startActivity(intent, optionsCompat.toBundle());
+
+            }else view.getContext().startActivity(intent);
 
         }
     }

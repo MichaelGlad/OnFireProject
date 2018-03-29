@@ -21,7 +21,8 @@
             android:layout_marginTop="16dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/user7" />
+            app:srcCompat="@drawable/user7"
+            android:transitionName="@string/shared_map_to_profile_user_image"/>
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="277dp"
@@ -43,7 +44,8 @@
                 android:textSize="@dimen/big_text_in_headline"
                 android:text="RONY MAGICOOL"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:transitionName="@string/shared_map_to_profile_user_name"/>
 
             <TextView
                 android:id="@+id/tv_profile_headline_status_tag"
@@ -64,7 +66,8 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/imageView5"
                 app:layout_constraintStart_toStartOf="@+id/tv_profile_headline_status_tag"
-                app:layout_constraintTop_toBottomOf="@+id/tv_profile_headline_status_tag" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_profile_headline_status_tag"
+                android:transitionName="@string/shared_map_to_profile_user_status"/>
 
 
             <TextView
